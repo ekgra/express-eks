@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: express-api
+  name: express-eks
   labels:
-    app: express-api
+    app: express-eks
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: express-api
+      app: express-eks
   template:
     metadata:
       labels:
-        app: express-api
+        app: express-eks
     spec:
       containers:
-      - name: express-api
-        image: <account-id>.dkr.ecr.ap-southeast-2.amazonaws.com/express-api:latest
+      - name: express-eks
+        image: 688790828242.dkr.ecr.ap-southeast-2.amazonaws.com/express-eks:latest
         ports:
         - containerPort: 3000
         env:
