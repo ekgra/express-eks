@@ -49,11 +49,14 @@ jobs:
           docker tag ${{ env.ECR_REPOSITORY }}:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
           docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
 
-      # Step 7: Save Image Tag as Artifact
-      - name: Save Image Tag as Artifact
-        run: echo "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest" > image_tag.txt
-      - name: Upload Image Tag Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: image-tag
-          path: image_tag.txt
+      # Step 7: Update GitHub Environment Variable with Image Tag
+      - name: Update IMAGE_TAG Environment Variable
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IMAGE_TAG="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest"
+          curl -X PATCH \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/environments/PROD/variables/IMAGE_TAG \
+            -d '{"value": "'"$IMAGE_TAG"'"}'
