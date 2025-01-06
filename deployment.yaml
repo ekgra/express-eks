@@ -16,9 +16,24 @@ spec:
     spec:
       containers:
       - name: express-eks
-        image: 688790828242.dkr.ecr.ap-southeast-2.amazonaws.com/express-eks:latest
+        image: IMAGE_PLACEHOLDER # Placeholder to be replaced dynamically
         ports:
         - containerPort: 3000
         env:
         - name: NAME
           value: "World"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-eks-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: express-eks
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
