@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -52,7 +52,7 @@ jobs:
       # Step 7: Update GitHub Environment Variable with Image Tag
       - name: Update IMAGE_TAG Environment Variable
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           IMAGE_TAG="${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest"
           curl -X PATCH \
