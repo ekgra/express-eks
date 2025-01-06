@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 // Dummy endpoint
 app.get('/dummy', (req, res) => {
   const name = process.env.NAME || 'World';
-  res.send(`Hello ${name}, The dummy page`);
+  res.send(`Namaskar ${name}, The dummy page`);
 });
 
 // Start the server
