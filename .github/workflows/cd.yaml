@@ -14,6 +14,7 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    environment: PROD
 
     steps:
       # Step 1: Download Artifact from CI Workflow
@@ -21,11 +22,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: image-tag
+          workflow: CI
+          path: ./artifacts  # Specify a directory to store the artifact
 
       # Step 2: Read Image Tag
       - name: Read Image Tag
         id: read-tag
-        run: echo "IMAGE_TAG=$(cat image_tag.txt)" >> $GITHUB_ENV
+        run: |
+          IMAGE_TAG=$(cat ./artifacts/image_tag.txt)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
       # Step 3: Configure kubectl for EKS
       - name: Configure kubectl
